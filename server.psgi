@@ -69,9 +69,7 @@ sub init {
 
     $self->xt(
         Text::Xslate->new(
-            syntax     => 'TTerse',
-            tag_start  => '[%',
-            tag_end    => '%]',
+            syntax => 'TTerse',
             path => ["./template/"],
             cache => 0,
             function => \%funcs,
