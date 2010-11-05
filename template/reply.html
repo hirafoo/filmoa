@@ -1,0 +1,18 @@
+[% WRAPPER "_wrapper.html" WITH hide_menu = 1 -%]
+reply to the tweet<hr />
+[%- IF parent_tweet %]
+<div class="tweet">
+[%- INCLUDE "_tweet.html" WITH t = parent_tweet %]
+</div>
+[%- END %]
+<br />
+<form method="post" action="/update">
+    [%- IF params.text %]
+    <textarea rows="5" cols="27" name="tweet"> RT @[% params.in_reply_to %]: [% params.text %]</textarea>
+    [%- ELSE -%]
+    <textarea rows="5" cols="27" name="tweet">@[% params.in_reply_to %] </textarea>
+    [%- END %]
+    <input type="hidden" name="in_reply_to_status_id" value="[% params.in_reply_to_status_id %]" />
+    <input type="submit" value="post" />
+</form>
+[% END -%]

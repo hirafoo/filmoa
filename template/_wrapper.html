@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//i-mode group (ja)//DTD XHTML i-XHTML(Locale/Ver.=ja/1.0) 1.0//EN" "i-xhtml_4ja_10.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>filmoa</title>
+        <style type="text/css">
+            body {
+                font-size: xx-small;
+                background-color: #B0C4DE;
+            }
+            .tweet {
+                background-color: #F1ECFB;
+            }
+            .reply {
+                background-color: #AFEEEE;
+            }
+        </style>
+    </head>
+    <body>
+        <span id="menu"></span>
+        &#xE6EB;<a accesskey="0" href="#menu">MN</a>
+        &#xE6E2;<a accesskey="1" href="/">&#xE663;</a>
+        &#xE6E3;<a accesskey="2" href="/mentions">＠</a>
+        &#xE6E4;<a accesskey="3" href="/retweets">RT</a>
+        &#xE6E5;<a accesskey="4" href="/messages">&#xE6D3;</a>
+        <hr />
+        [%- UNLESS hide_menu %]
+        <form method="post" action="/update">
+            <input type="text" name="tweet" />
+            <input type="submit" value="tweet" />
+        </form>
+        [%- END %]
+        [% content %]
+    </body>
+</html>

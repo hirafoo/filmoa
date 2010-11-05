@@ -1,0 +1,21 @@
+[% FOR t in tweets %]
+<hr />
+[%- SET tweet_class = "" %]
+[%- IF t.in_reply_to_screen_name && t.in_reply_to_screen_name == user %]
+[%- tweet_class = "reply" %]
+[%- ELSE %]
+[%- tweet_class = "tweet" %]
+[%- END %]
+<div class="[% tweet_class %]">
+[%- INCLUDE "_tweet.html" WITH t = t %]
+[%- UNLESS no_reply_link %]
+<a href="/reply?in_reply_to=[% t.user.screen_name %]&in_reply_to_status_id=[% t.id %]">返信</a>
+<a href="/reply?in_reply_to=[% t.user.screen_name %]&in_reply_to_status_id=[% t.id %]&text=[% t.text | raw %]">RT</a>
+via [% t.source | raw %]
+[%- END %]
+</div>
+[% END %]
+<hr />
+[%- UNLESS no_pager %]
+[% INCLUDE 'pager.html' %]
+[%- END %]

@@ -1,0 +1,7 @@
+<img width="24" height="24" src="[% t.user.profile_image_url %]" />
+<a href="http://twitter.com/[% t.user.screen_name %]">[% t.by %]</a>
+[% t.text_linked | raw %]<br /><br />
+[%- IF t.in_reply_to_status_id %]
+<a href="http://twitter.com/[% t.in_reply_to_screen_name %]/statuses/[% t.in_reply_to_status_id %]">in reply to [% t.in_reply_to_screen_name %]</a><br />
+[%- END %]
+[% t.created_at.ymd('/') %] [% t.created_at.hms(':') %]<br />
