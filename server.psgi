@@ -132,10 +132,11 @@ sub update {
     my ($self, $params) = @_;
     my $status_id = $params->{in_reply_to_status_id};
     my %post_params = (
-        status => $utf->decode($params->{tweet}),
+        status => $utf->decode($params->{tweet} || ""),
         ($status_id ? (in_reply_to_status_id => $status_id) : ()),
     );
-    $self->nt->update(\%post_params);
+    $self->nt->update(\%post_params) if $post_params{status};
+    +{}
 }
 
 sub fix_tweets {
