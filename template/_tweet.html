@@ -1,5 +1,5 @@
 [%- st = t.retweeted_status || t %]
-[%- u = t.sender || t.user %]
+[%- u = t.sender || st.user %]
 
 <img width="24" height="24" src="[% u.profile_image_url %]" />
 [%- IF t.retweeted_status %]

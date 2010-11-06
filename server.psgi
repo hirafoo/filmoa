@@ -155,6 +155,7 @@ sub fix_tweets {
             $rt->{text} =~ s/^RT //;
             $rt->{created_at} = parse_time($t->{retweeted_status}->{created_at});
             $rt->{source} = decode_entities($t->{retweeted_status}->{source} || "");
+            $rt->{by} = ($rt->{user}{screen_name} or $rt->{sender}{screen_name} or $rt->{from_user});
         }
         push @fixed, $t;
     }
