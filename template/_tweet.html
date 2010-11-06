@@ -1,11 +1,12 @@
 [%- st = t.retweeted_status || t %]
+[%- u = t.sender || t.user %]
 
-<img width="24" height="24" src="[% st.user.profile_image_url %]" />
+<img width="24" height="24" src="[% u.profile_image_url %]" />
 [%- IF t.retweeted_status %]
 <span title="Retweets from people you follow appear in your timeline." class="big-retweet-icon"></span>
 [%- END %]
 
-[% tw_link(st.user.screen_name) | raw %]
+[% tw_link(st.by) | raw %]
 [% st.text_linked | raw %]<br /><br />
 
 [%- IF st.in_reply_to_status_id %]
