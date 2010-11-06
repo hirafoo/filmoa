@@ -65,6 +65,11 @@ sub init {
     $self->nt->access_token_secret($config->{access_token_secret});
 
     my %funcs = (
+        tw_link => sub {
+            my ($name, $text) = @_;
+            $text ||= $name;
+            qq{<a href="http://twitter.com/$name">$text</a>}
+        },
     );
 
     $self->xt(
@@ -121,7 +126,7 @@ sub retweets {
 }
 sub messages {
     my ($self, $params) = @_;
-    +{tweets => $self->fix_tweets($self->nt->direct_messages, "direct_messages")}
+    +{tweets => $self->fix_tweets($self->nt->direct_messages)}
 }
 sub update {
     my ($self, $params) = @_;
@@ -142,6 +147,14 @@ sub fix_tweets {
         $t->{created_at} = parse_time($t->{created_at});
         $t->{source} = decode_entities($t->{source} || "");
         $t->{by} = ($t->{user}{screen_name} or $t->{sender}{screen_name} or $t->{from_user});
+        if (my $rt = $t->{retweeted_status}) {
+            $rt->{text_linked} = decode_entities(add_link($t->{retweeted_status}->{text}));
+            $rt->{text} = decode_entities($t->{retweeted_status}->{text});
+            $rt->{text_linked} =~ s/^RT //;
+            $rt->{text} =~ s/^RT //;
+            $rt->{created_at} = parse_time($t->{retweeted_status}->{created_at});
+            $rt->{source} = decode_entities($t->{retweeted_status}->{source} || "");
+        }
         push @fixed, $t;
     }
     \@fixed;

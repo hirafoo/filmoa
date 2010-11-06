@@ -1,0 +1,9 @@
+<div style="text-align:center;">
+[% IF params.page != 1 %]
+<a accesskey="*" href="/[% action_uri %]?page=[% params.page - 1 %]&max_id=[% params.max_id %]">* 前へ</a>
+[%- ELSE %]
+* 前へ
+[%- END %]
+ / 
+<a accesskey="#" href="/[% action_uri %]?page=[% params.page + 1 %]&max_id=[% tweets.0.id %]">次へ #</a>
+</div>

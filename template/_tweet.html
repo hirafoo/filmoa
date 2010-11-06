@@ -1,7 +1,19 @@
-<img width="24" height="24" src="[% t.user.profile_image_url %]" />
-<a href="http://twitter.com/[% t.user.screen_name %]">[% t.by %]</a>
-[% t.text_linked | raw %]<br /><br />
-[%- IF t.in_reply_to_status_id %]
-<a href="http://twitter.com/[% t.in_reply_to_screen_name %]/statuses/[% t.in_reply_to_status_id %]">in reply to [% t.in_reply_to_screen_name %]</a><br />
+[%- st = t.retweeted_status || t %]
+
+<img width="24" height="24" src="[% st.user.profile_image_url %]" />
+[%- IF t.retweeted_status %]
+<span title="Retweets from people you follow appear in your timeline." class="big-retweet-icon"></span>
 [%- END %]
-[% t.created_at.ymd('/') %] [% t.created_at.hms(':') %]<br />
+
+[% tw_link(st.user.screen_name) | raw %]
+[% st.text_linked | raw %]<br /><br />
+
+[%- IF st.in_reply_to_status_id %]
+<a href="http://twitter.com/[% st.in_reply_to_screen_name %]/statuses/[% st.in_reply_to_status_id %]">in reply to [% st.in_reply_to_screen_name %]</a><br />
+[%- END %]
+
+[% st.created_at.ymd('/') %] [% st.created_at.hms(':') %]<br />
+
+[%- IF t.retweeted_status %]
+retweeted by [% tw_link(t.user.screen_name) | raw %]<br />
+[%- END %]
