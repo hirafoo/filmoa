@@ -13,7 +13,7 @@
 <a href="http://twitter.com/[% st.in_reply_to_screen_name %]/statuses/[% st.in_reply_to_status_id %]">in reply to [% st.in_reply_to_screen_name %]</a><br />
 [%- END %]
 
-[% st.created_at.ymd('/') %] [% st.created_at.hms(':') %]<br />
+[% ago(st.created_at) %]<br />
 
 [%- IF t.retweeted_status %]
 retweeted by [% tw_link(t.user.screen_name) | raw %]<br />
