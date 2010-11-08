@@ -2,8 +2,8 @@ package Filmoa;
 use parent qw/Class::Accessor::Fast/;
 use strict;
 use warnings;
+use Config::Pit qw/pit_get/;
 use Data::Dumper qw/Dumper/;
-use Config::Pit;
 use Encode qw/find_encoding/;
 use HTML::Entities qw/encode_entities decode_entities/;
 use Net::Twitter;
@@ -35,11 +35,11 @@ sub add_link {
     my $html = '';
     for my $token (split m{(http://[A-Za-z0-9_%@/~\-\.\?\#]+|\@[0-9A-Za-z_]+)}, $tweet) {
         if ($token =~ m{^http://}) {
-            $html .= '<a href="' . encode_entities($token) . '">'
+            $html .= '<a href="' . encode_entities($token) . '" target="_blank">'
             . encode_entities($token) . '</a>';
         } elsif ($token =~ m{^\@(.*)$}) {
             my $user = $1;
-            $html .= '<a href="http://twitter.com/' . encode_entities($user) . '">'
+            $html .= '<a href="http://twitter.com/' . encode_entities($user) . '" target="_blank">'
             . encode_entities($token) . '</a>';
         } else {
             $html .= encode_entities($token);
@@ -68,7 +68,7 @@ sub init {
         tw_link => sub {
             my ($name, $text) = @_;
             $text ||= $name;
-            qq{<a href="http://twitter.com/$name">$text</a>}
+            qq{<a href="http://twitter.com/$name" target="_blank">$text</a>}
         },
         ago => sub {
             my $created_at = shift;
@@ -76,7 +76,6 @@ sub init {
             $now += 32400;
 
             my $diff = $now->epoch - $created_at->epoch;
-            #p [$now->ymd . " " . $now->hms, $now->epoch, $created_at->ymd . " " . $created_at->hms, $created_at->epoch, $diff];
 
             if ($diff < 5) {
                 "less than 5 seconds ago"
@@ -170,23 +169,25 @@ sub update {
     +{}
 }
 
+sub _fix_tweet {
+    my ($t, $is_rt) = @_;
+    $t->{text_linked} = decode_entities(add_link($t->{text}));
+    $t->{text} = decode_entities($t->{text});
+    $t->{created_at} = parse_time($t->{created_at});
+    $t->{source} = decode_entities($t->{source} || "");
+    $t->{by} = ($t->{user}{screen_name} or $t->{sender}{screen_name} or $t->{from_user});
+    if ($is_rt) {
+        $t->{text_linked} =~ s/^RT //;
+        $t->{text} =~ s/^RT //;
+    }
+}
 sub fix_tweets {
     my ($self, $tweets) = @_;
     my @fixed;
     for my $t (@$tweets) {
-        $t->{text_linked} = decode_entities(add_link($t->{text}));
-        $t->{text} = decode_entities($t->{text});
-        $t->{created_at} = parse_time($t->{created_at});
-        $t->{source} = decode_entities($t->{source} || "");
-        $t->{by} = ($t->{user}{screen_name} or $t->{sender}{screen_name} or $t->{from_user});
+        _fix_tweet($t);
         if (my $rt = $t->{retweeted_status}) {
-            $rt->{text_linked} = decode_entities(add_link($t->{retweeted_status}->{text}));
-            $rt->{text} = decode_entities($t->{retweeted_status}->{text});
-            $rt->{text_linked} =~ s/^RT //;
-            $rt->{text} =~ s/^RT //;
-            $rt->{created_at} = parse_time($t->{retweeted_status}->{created_at});
-            $rt->{source} = decode_entities($t->{retweeted_status}->{source} || "");
-            $rt->{by} = ($rt->{user}{screen_name} or $rt->{sender}{screen_name} or $rt->{from_user});
+            _fix_tweet($rt, 1);
         }
         push @fixed, $t;
     }
