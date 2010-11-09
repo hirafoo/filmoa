@@ -166,7 +166,7 @@ sub update {
         ($status_id ? (in_reply_to_status_id => $status_id) : ()),
     );
     $self->nt->update(\%post_params) if $post_params{status};
-    +{}
+    +{tweets => $self->fix_tweets($self->nt->home_timeline)}
 }
 
 sub _fix_tweet {
