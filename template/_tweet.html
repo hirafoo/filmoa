@@ -14,6 +14,7 @@
 [%- END %]
 
 [% ago(st.created_at) %]<br />
+[% st.created_at.ymd('/') %] [% st.created_at.hms %]<br />
 
 [%- IF t.retweeted_status %]
 retweeted by [% tw_link(t.user.screen_name) | raw %]<br />

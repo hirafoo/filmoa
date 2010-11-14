@@ -12,7 +12,7 @@ use Plack::Request;
 use Text::Xslate;
 use Time::Piece;
 
-__PACKAGE__->mk_accessors(qw/nt xt user/);
+__PACKAGE__->mk_accessors(qw/nt xt user action/);
 
 sub p {
     warn Dumper @_;
@@ -47,7 +47,6 @@ sub add_link {
     }
     $html;
 }
-
 
 sub init {
     my ($self) = @_;
@@ -108,7 +107,6 @@ sub init {
             path => ["./template/"],
             cache => 0,
             function => \%funcs,
-            #type => "text",
         )
     );
 }
@@ -116,14 +114,15 @@ sub init {
 #my $root = file(__FILE__)->dir->absolute->stringify;
 
 sub gen_app {
-    my ($self, $action_uri) = @_;
+    my ($self, $action) = @_;
 
     my $app = sub {
         my $env = shift;
         my $req = Plack::Request->new($env);
         my $params = $req->parameters->as_hashref;
-        my $html = "$action_uri.html";
-        my %stash = (%{$self->$action_uri($params)}, action_uri => $action_uri, params => $params, user => $self->user);
+        my $html = "$action.html";
+        $self->action($action);
+        my %stash = (%{$self->$action($params)}, action => $action, params => $params, user => $self->user);
         my $body = utf->encode($self->xt->render($html, \%stash));
         return [
             '200',
@@ -133,30 +132,36 @@ sub gen_app {
     };
 }
 
-sub index {
+my %api_table = (
+    index    => "home_timeline",
+    mentions => "mentions",
+    retweets => "retweets_of_me",
+    messages => "direct_messages",
+    update   => "home_timeline",
+);
+sub get_tweets {
     my ($self, $params) = @_;
     my $page = $params->{page} ||= 1;
     my $max_id = $params->{max_id} ||= 0;
+    my $meth = $api_table{$self->action};
     my %opt = (page => $page, ($max_id ? (max_id => $max_id) : ()));
-    +{tweets => $self->fix_tweets($self->nt->home_timeline(\%opt))}
+    $self->fix_tweets($self->nt->$meth(\%opt));
+}
+sub index {
+    my ($self, $params) = @_;
+    +{tweets => $self->get_tweets($params)};
 }
 sub mentions {
     my ($self, $params) = @_;
-    my $page = $params->{page} ||= 1;
-    my $max_id = $params->{max_id} ||= 0;
-    my %opt = (page => $page, ($max_id ? (max_id => $max_id) : ()));
-    +{tweets => $self->fix_tweets($self->nt->mentions(\%opt))}
+    +{tweets => $self->get_tweets($params)};
 }
 sub retweets {
     my ($self, $params) = @_;
-    my $page = $params->{page} ||= 1;
-    my $max_id = $params->{max_id} ||= 0;
-    my %opt = (page => $page, ($max_id ? (max_id => $max_id) : ()));
-    +{tweets => $self->fix_tweets($self->nt->retweets_of_me(\%opt))}
+    +{tweets => $self->get_tweets($params)};
 }
 sub messages {
     my ($self, $params) = @_;
-    +{tweets => $self->fix_tweets($self->nt->direct_messages)}
+    +{tweets => $self->get_tweets($params)};
 }
 sub update {
     my ($self, $params) = @_;
@@ -166,7 +171,7 @@ sub update {
         ($status_id ? (in_reply_to_status_id => $status_id) : ()),
     );
     $self->nt->update(\%post_params) if $post_params{status};
-    +{tweets => $self->fix_tweets($self->nt->home_timeline)}
+    +{tweets => $self->get_tweets($params)};
 }
 
 sub _fix_tweet {
