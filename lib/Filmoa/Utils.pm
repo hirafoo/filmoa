@@ -70,18 +70,22 @@ sub get_tweet {
 }
 
 my %api_table = (
-    index    => "home_timeline",
-    mentions => "mentions",
-    retweets => "retweets_of_me",
-    messages => "direct_messages",
-    update   => "home_timeline",
-    user     => "user_timeline",
+    Root => {
+        index    => "home_timeline",
+        mentions => "mentions",
+        retweets => "retweets_of_me",
+        messages => "direct_messages",
+        update   => "home_timeline",
+    },
+    User => {
+        index    => "user_timeline",
+    },
 );
 sub get_tweets {
     my ($params) = @_;
     my $page   = $params->{page} ||= 1;
     my $max_id = $params->{max_id} ||= 0;
-    my $meth   = $api_table{$params->{action}};
+    my $meth   = $api_table{$params->{controller}}->{$params->{action}};
     my $user   = $params->{user};
     my %opt    = (
         page => $page,
