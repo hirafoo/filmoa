@@ -199,14 +199,21 @@ sub fix_tweets {
     \@fixed;
 }
 
+sub get_parent {
+    my ($self, $params) = @_;
+    my $parent_id = $params->{in_reply_to_status_id} or return;
+    my $parent = $self->nt->show_status({id => $parent_id});
+    my $grand_parent_id = $parent->{in_reply_to_status_id};
+    $params = $grand_parent_id ? +{in_reply_to_status_id => $grand_parent_id} : +{};
+    ($self->fix_tweets([$parent])->[0], $params);
+}
+
 sub reply {
     my ($self, $params) = @_;
-    my $parent_tweet;
-    if (my $res_to = $params->{in_reply_to_status_id}) {
-        $parent_tweet = $self->nt->show_status({id => $res_to});
-        $parent_tweet = $self->fix_tweets([$parent_tweet])->[0];
-    }
-    +{parent_tweet => $parent_tweet}
+    my ($parent_tweet, $grand_parent_tweet);
+    ($parent_tweet, $params) = $self->get_parent($params);
+    ($grand_parent_tweet, $params) = $self->get_parent($params);
+    +{parent_tweet => $parent_tweet, grand_parent_tweet => $grand_parent_tweet}
 }
 
 package main;

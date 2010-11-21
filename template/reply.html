@@ -5,6 +5,12 @@ reply to the tweet<hr />
 [%- INCLUDE "_tweet.html" WITH t = parent_tweet %]
 </div>
 [%- END %]
+[%- IF grand_parent_tweet %]
+<hr />
+<div class="tweet">
+[%- INCLUDE "_tweet.html" WITH t = grand_parent_tweet %]
+</div>
+[%- END %]
 <br />
 <form method="post" action="/update">
     [%- IF params.text %]
