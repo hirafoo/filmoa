@@ -6,16 +6,16 @@
 <span title="Retweets from people you follow appear in your timeline." class="big-retweet-icon"></span>
 [%- END %]
 
-[% tw_link(st.by) | raw %]
+[% user_link(st.by) | raw %]
 [% st.text_linked | raw %]<br /><br />
 
 [%- IF st.in_reply_to_status_id %]
-<a href="http://twitter.com/[% st.in_reply_to_screen_name %]/statuses/[% st.in_reply_to_status_id %]">in reply to [% st.in_reply_to_screen_name %]</a><br />
+<a href="/user/[% st.in_reply_to_screen_name %]/statuses?id=[% st.in_reply_to_status_id %]">in reply to [% st.in_reply_to_screen_name %]</a><br />
 [%- END %]
 
-[% ago(st.created_at) %]<br />
+<a href="/user/[% st.by %]/status?id=[% st.id %]">[% ago(st.created_at) %]</a><br />
 [% st.created_at.ymd('/') %] [% st.created_at.hms %]<br />
 
 [%- IF t.retweeted_status %]
-retweeted by [% tw_link(t.user.screen_name) | raw %]<br />
+retweeted by [% user_link(t.user.screen_name) | raw %]<br />
 [%- END %]
