@@ -1,10 +1,7 @@
 package Filmoa::Handler;
-use Filmoa::Router;
 use Filmoa::Utils;
 use Filmoa::View;
-use Module::Pluggable::Object;
 use Plack::Request;
-use UNIVERSAL::require;
 
 sub handler {
     my ($class, $env) = @_;
