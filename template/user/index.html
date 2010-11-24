@@ -1,3 +1,8 @@
 [% WRAPPER "_wrapper.html" -%]
+<hr />
+<div class="center">
+    user: [% params.user %]<br />
+    <a href="/user/[% params.user %]">tweet</a> / <a href="/user/[% params.user %]/profile">profile</a>
+</div>
 [% INCLUDE '_print_tweets.html' %]
 [% END -%]

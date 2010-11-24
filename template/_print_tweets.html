@@ -1,7 +1,7 @@
 [% FOR t in tweets %]
 <hr />
 [%- SET tweet_class = "" %]
-[%- IF t.in_reply_to_screen_name && t.in_reply_to_screen_name == user %]
+[%- IF t.in_reply_to_screen_name && t.in_reply_to_screen_name == you %]
 [%- tweet_class = "reply" %]
 [%- ELSIF t.retweeted_status %]
 [%- tweet_class = "retweet" %]

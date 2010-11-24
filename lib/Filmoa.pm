@@ -4,7 +4,7 @@ use Filmoa::Loader;
 use Config::Pit qw/pit_get/;
 use Net::Twitter;
 
-our ($config, $nt);
+our ($config, $nt, $params);
 
 sub setup {
     my $class = shift;
@@ -14,6 +14,7 @@ sub setup {
 sub init {
     my $class = shift;
     $config = pit_get("filmoa"),
+    $params = +{};
     $class->init_nt;
 }
 

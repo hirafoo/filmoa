@@ -9,7 +9,7 @@ use Filmoa::Router;
 use HTML::Entities qw/encode_entities decode_entities/;
 use Time::Piece;
 
-our @EXPORT = qw/p say utf router config nt
+our @EXPORT = qw/p say utf router config nt params
                  get_tweet get_tweets fix_tweets get_parent/;
 
 sub import {
@@ -37,6 +37,10 @@ sub config { $Filmoa::config }
 sub utf { $utf }
 sub router { $router }
 sub nt { $Filmoa::nt }
+sub params {
+    my $p = shift;
+    $p ? ($Filmoa::params = $p) : $Filmoa::params;
+}
 
 sub parse_time {
     my ($created_at, $opt) = @_;
