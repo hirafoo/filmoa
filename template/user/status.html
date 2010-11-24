@@ -1,7 +1,13 @@
 [% WRAPPER "_wrapper.html" WITH hide_menu = 1 -%]
 <div class="tweet">
-[%- INCLUDE "_tweet.html" WITH t = tweet %]
-<a href="/reply?in_reply_to=[% tweet.by %]&in_reply_to_status_id=[% tweet.id %]">返信</a>
-<a href="/reply?in_reply_to=[% tweet.by %]&in_reply_to_status_id=[% tweet.id %]&text=[% tweet.text | raw %]">RT</a>
+[%- INCLUDE "_tweet.html" WITH t = target_tweet %]
+[%- IF parent_tweet %]
+<hr />
+<div class="tweet">
+[%- INCLUDE "_tweet.html" WITH t = parent_tweet %]
+</div>
+[%- END %]
+<a href="/reply?in_reply_to=[% target_tweet.by %]&in_reply_to_status_id=[% target_tweet.id %]">返信</a>
+<a href="/reply?in_reply_to=[% target_tweet.by %]&in_reply_to_status_id=[% target_tweet.id %]&text=[% target_tweet.text | raw %]">RT</a>
 </div>
 [% END -%]

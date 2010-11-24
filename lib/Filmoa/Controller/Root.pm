@@ -19,10 +19,10 @@ sub update {
 
 sub reply {
     my ($class, $params) = @_;
-    my ($parent_tweet, $grand_parent_tweet);
-    ($parent_tweet, $params) = get_parent($params);
-    ($grand_parent_tweet, $params) = get_parent($params);
-    +{parent_tweet => $parent_tweet, grand_parent_tweet => $grand_parent_tweet}
+    my ($target_tweet, $parent_tweet);
+    $target_tweet = get_tweet($params->{in_reply_to_status_id});
+    $parent_tweet = get_parent($target_tweet);
+    +{target_tweet => $target_tweet, parent_tweet => $parent_tweet}
 }
 
 1;

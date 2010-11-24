@@ -63,12 +63,6 @@ sub add_link {
     $html;
 }
 
-sub get_tweet {
-    my $id = shift;
-    my $tweet = nt->show_status({id => $id});
-    fix_tweets([$tweet])->[0];
-}
-
 my %api_table = (
     Root => {
         index    => "home_timeline",
@@ -98,10 +92,10 @@ sub get_tweets {
 sub _fix_tweet {
     my ($t, $is_rt) = @_;
     $t->{text_linked} = decode_entities(add_link($t->{text}));
-    $t->{text} = decode_entities($t->{text});
-    $t->{created_at} = parse_time($t->{created_at});
-    $t->{source} = decode_entities($t->{source} || "");
-    $t->{by} = ($t->{user}{screen_name} or $t->{sender}{screen_name} or $t->{from_user});
+    $t->{text}        = decode_entities($t->{text});
+    $t->{created_at}  = parse_time($t->{created_at});
+    $t->{source}      = decode_entities($t->{source} || "");
+    $t->{by}          = ($t->{user}{screen_name} or $t->{sender}{screen_name} or $t->{from_user});
     if ($is_rt) {
         $t->{text_linked} =~ s/^RT //;
         $t->{text} =~ s/^RT //;
@@ -120,13 +114,14 @@ sub fix_tweets {
     \@fixed;
 }
 
+sub get_tweet {
+    my $id = shift or return;
+    my $tweet = nt->show_status({id => $id});
+    fix_tweets([$tweet])->[0];
+}
 sub get_parent {
-    my ($params) = @_;
-    my $parent_id = $params->{in_reply_to_status_id} or return;
-    my $parent = nt->show_status({id => $parent_id});
-    my $grand_parent_id = $parent->{in_reply_to_status_id};
-    $params = $grand_parent_id ? +{in_reply_to_status_id => $grand_parent_id} : +{};
-    (fix_tweets([$parent])->[0], $params);
+    my $tweet = shift;
+    get_tweet($tweet->{in_reply_to_status_id});
 }
 
 1;
