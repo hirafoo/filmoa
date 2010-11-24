@@ -10,7 +10,7 @@
 [% st.text_linked | raw %]<br /><br />
 
 [%- IF st.in_reply_to_status_id %]
-<a href="/user/[% st.in_reply_to_screen_name %]/statuses?id=[% st.in_reply_to_status_id %]">in reply to [% st.in_reply_to_screen_name %]</a><br />
+<a href="/user/[% st.in_reply_to_screen_name %]/status?id=[% st.in_reply_to_status_id %]">in reply to [% st.in_reply_to_screen_name %]</a><br />
 [%- END %]
 
 <a href="/user/[% st.by %]/status?id=[% st.id %]">[% ago(st.created_at) %]</a><br />
