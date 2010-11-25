@@ -25,7 +25,7 @@ sub following {
 
 sub followers {
     my $cursor = params->{cursor} || -1;
-    my $followers = nt->friends({id => params->{user}, count => 40, cursor => $cursor});
+    my $followers = nt->followers({id => params->{user}, count => 40, cursor => $cursor});
     +{data => $followers, current_cursor => $cursor}
 }
 
