@@ -1,0 +1,13 @@
+<div class="center">
+[% IF current_cursor == -1 %]
+* 前へ
+[%- ELSE %]
+<a accesskey="*" href="?cursor=[% previous_cursor %]">* 前へ</a>
+[%- END %]
+ / 
+[% IF next_cursor == 0 %]
+次へ #
+[%- ELSE %]
+<a accesskey="#" href="?cursor=[% next_cursor %]">次へ #</a>
+[%- END %]
+</div>

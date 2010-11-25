@@ -1,0 +1,10 @@
+[% WRAPPER "_wrapper.html" %]
+<div class="center border_light">
+    [% user_link(params.user) | raw %] following
+</div>
+<hr />
+[% FOR user IN data.users %]
+    [% INCLUDE '_user.html' WITH user = user %]
+[% END %]
+[% INCLUDE '_user_pager.html' WITH previous_cursor = data.previous_cursor, next_cursor = data.next_cursor %]
+[% END %]

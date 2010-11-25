@@ -12,12 +12,22 @@ sub xt {
     );
 }
 
+sub _link {
+    my ($href, $text) = @_;
+    qq{<a href="$href" target="_blank">$text</a>}
+}
+
 sub funcs {
     +{ 
+        link => sub {
+            my ($href, $text) = @_;
+            $href or return;
+            $text ||= $href;
+            _link($href, $text);
+        },
         user_link => sub {
-            my ($name, $text) = @_;
-            $text ||= $name;
-            qq{<a href="/user/$name" target="_blank">$text</a>}
+            my ($name) = @_;
+            _link("/user/$name", $name);
         },
         ago => sub {
             my $created_at = shift;

@@ -1,7 +1,9 @@
 [%- st = t.retweeted_status || t %]
 [%- u = t.sender || st.user %]
 
+[%- UNLESS not_show_profile_icon %]
 <img width="24" height="24" src="[% u.profile_image_url %]" />
+[%- END %]
 [%- IF t.retweeted_status %]
 <span title="Retweets from people you follow appear in your timeline." class="big-retweet-icon"></span>
 [%- END %]

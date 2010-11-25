@@ -1,8 +1,11 @@
 [% WRAPPER "_wrapper.html" -%]
-<hr />
 <div class="center">
-    user: [% params.user %]<br />
-    <a href="/user/[% params.user %]">tweet</a> / <a href="/user/[% params.user %]/profile">profile</a>
+    <img src="[% user.profile_image_url %]" /><br />
+    <a href="/user/[% params.user %]">[% params.user %]</a><br />
+    following:<a href="/user/[% params.user %]/following">[% user.friends_count %]</a>
+    followers:<a href="/user/[% params.user %]/followers">[% user.followers_count %]</a><br />
+    <a href="/user/[% params.user %]/profile">profile</a>
 </div>
-[% INCLUDE '_print_tweets.html' %]
+<br />
+[% INCLUDE '_print_tweets.html' WITH not_show_profile_icon = 1 %]
 [% END -%]

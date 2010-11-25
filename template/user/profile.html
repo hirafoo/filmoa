@@ -1,11 +1,17 @@
 [% WRAPPER "_wrapper.html" -%]
 <div class="center">
-    [% user.screen_name %] ([% user.name %])
+    <p>
+        <img src="[% user.profile_image_url %]" /><br />
+        [% user_link(user.screen_name) | raw %] ([% user.name %])
+    </p>
 </div>
+
+<hr />
+
 <div class="center border_dim">following</div>
-[% user.friends_count %]
+<a href="/user/[% user.screen_name %]/following">[% user.friends_count %]</a>
 <div class="center border_dim">followers</div>
-[% user.followers_count %]
+<a href="/user/[% user.screen_name %]/followers">[% user.followers_count %]</a>
 <div class="center border_dim">bio</div>
 [% user.description %]
 <div class="center border_dim">location</div>
@@ -13,5 +19,5 @@
 <div class="center border_dim">statuses_count</div>
 [% user.statuses_count %]
 <div class="center border_dim">url</div>
-[% user.url %]
+[% link(user.url) | raw %]
 [% END -%]
