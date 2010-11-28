@@ -5,6 +5,7 @@ sub index    { +{tweets => get_tweets(params)} }
 sub mentions { +{tweets => get_tweets(params)} }
 sub retweets { +{tweets => get_tweets(params)} }
 sub messages { +{tweets => get_tweets(params)} }
+sub favs { +{favs => get_favs()} }
 
 sub update {
     my $status_id = params->{in_reply_to_status_id};

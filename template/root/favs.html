@@ -1,0 +1,5 @@
+[% WRAPPER "_wrapper.html" -%]
+[% FOR f IN favs -%]
+[% link(f.link, f.content) | raw -%]<hr />
+[% END -%]
+[% END -%]

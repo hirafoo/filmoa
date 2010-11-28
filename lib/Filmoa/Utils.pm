@@ -8,9 +8,11 @@ use Filmoa;
 use Filmoa::Router;
 use HTML::Entities qw/encode_entities decode_entities/;
 use Time::Piece;
+use LWP::UserAgent;
+use XML::RSS;
 
 our @EXPORT = qw/p say utf router config nt params
-                 get_tweet get_tweets fix_tweets get_parent/;
+                 get_tweet get_tweets fix_tweets get_parent get_favs/;
 
 sub import {
     strict->import;
@@ -127,5 +129,23 @@ sub get_parent {
     my $tweet = shift;
     get_tweet($tweet->{in_reply_to_status_id});
 }
+
+sub get_favs {
+    my $user = shift || config->{you};
+
+    my @favs;
+    my $ua = LWP::UserAgent->new;
+    my $rss = XML::RSS->new;
+    my $body = $rss->parse($ua->get("http://ja.favstar.fm/users/$user/rss")->decoded_content);
+    for my $i (@{$body->{items}}) {
+        my $content = $i->{title};
+        $content =~ s/stars?/favs/;
+        my $link = $i->{link};
+        $link =~ s{http://favstar.fm/users/}{http://twitter.com/};
+        push @favs, +{content => $content, link => $link};
+    }
+    \@favs;
+}
+
 
 1;
