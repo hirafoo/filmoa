@@ -1,11 +1,11 @@
 package Filmoa::Controller::Root;
 use Filmoa::Utils;
 
-sub index    { +{tweets => get_tweets(params)} }
-sub mentions { +{tweets => get_tweets(params)} }
-sub retweets { +{tweets => get_tweets(params)} }
-sub messages { +{tweets => get_tweets(params)} }
-sub favs { +{favs => get_favs()} }
+sub index     { +{tweets   => get_tweets(params)} }
+sub mentions  { +{tweets   => get_tweets(params), title => "mentions"} }
+sub retweets  { +{tweets   => get_tweets(params), title => "retweets"} }
+sub messages  { +{tweets   => get_tweets(params), title => "messages"} }
+sub favorated { +{statuses => get_favorated(), title => "favorated"} }
 
 sub update {
     my $status_id = params->{in_reply_to_status_id};

@@ -1,0 +1,5 @@
+[% WRAPPER "_wrapper.html" -%]
+[% FOR s IN statuses -%]
+[% link(s.link, s.content) | raw -%]<hr />
+[% END -%]
+[% END -%]

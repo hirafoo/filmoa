@@ -4,15 +4,16 @@ use strict;
 use warnings;
 use Data::Dumper qw/Dumper/;
 use Encode qw/find_encoding/;
-use Filmoa;
+use Filmoa::Config;
 use Filmoa::Router;
+use Filmoa::Twitter;
 use HTML::Entities qw/encode_entities decode_entities/;
 use Time::Piece;
 use LWP::UserAgent;
 use XML::RSS;
 
-our @EXPORT = qw/p say utf router config nt params
-                 get_tweet get_tweets fix_tweets get_parent get_favs/;
+our @EXPORT = qw/p say utf router nt params
+                 get_tweet get_tweets fix_tweets get_parent get_favorated/;
 
 sub import {
     strict->import;
@@ -30,18 +31,19 @@ sub p {
     print STDERR "  at $c[1]:$c[2]\n\n"
 }
 
-my ($utf, $router) = (
+my ($utf, $router, $nt, $params) = (
     find_encoding('utf-8'),
     Filmoa::Router->routing,
+    Filmoa::Twitter->setup_nt,
+    +{},
 );
 
-sub config { $Filmoa::config }
 sub utf { $utf }
 sub router { $router }
-sub nt { $Filmoa::nt }
+sub nt { $nt }
 sub params {
     my $p = shift;
-    $p ? ($Filmoa::params = $p) : $Filmoa::params;
+    $p ? ($params = $p) : $params;
 }
 
 sub parse_time {
@@ -130,10 +132,10 @@ sub get_parent {
     get_tweet($tweet->{in_reply_to_status_id});
 }
 
-sub get_favs {
+sub get_favorated {
     my $user = shift || config->{you};
 
-    my @favs;
+    my @statuses;
     my $ua = LWP::UserAgent->new;
     my $rss = XML::RSS->new;
     my $body = $rss->parse($ua->get("http://ja.favstar.fm/users/$user/rss")->decoded_content);
@@ -142,9 +144,9 @@ sub get_favs {
         $content =~ s/stars?/favs/;
         my $link = $i->{link};
         $link =~ s{http://favstar.fm/users/}{http://twitter.com/};
-        push @favs, +{content => $content, link => $link};
+        push @statuses, +{content => $content, link => $link};
     }
-    \@favs;
+    \@statuses;
 }
 
 

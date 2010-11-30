@@ -1,10 +1,10 @@
 [% WRAPPER "_wrapper.html" -%]
 <div class="center">
     <img src="[% user.profile_image_url %]" /><br />
-    <a href="/user/[% params.user %]">[% params.user %]</a><br />
+    <a href="/user/[% params.user %]">[% params.user %]</a> / [% user.name %]<br />
     following:<a href="/user/[% params.user %]/following">[% user.friends_count %]</a>
     followers:<a href="/user/[% params.user %]/followers">[% user.followers_count %]</a><br />
-    <a href="/user/[% params.user %]/profile">profile</a>
+    <a href="/user/[% params.user %]/profile">profile</a> / [% link('http://twtr.jp/user/' _ params.user, 'twtr.jp') | raw %]
 </div>
 <br />
 [% INCLUDE '_print_tweets.html' WITH not_show_profile_icon = 1 %]

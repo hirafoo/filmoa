@@ -3,7 +3,7 @@ use Filmoa::Utils;
 
 sub index {
     my $user = nt->show_user(params->{user});
-    +{user => $user, tweets => get_tweets(params)}
+    +{user => $user, title => $user->{screen_name}, tweets => get_tweets(params)}
 }
 
 sub status {

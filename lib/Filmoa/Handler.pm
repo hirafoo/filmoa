@@ -1,4 +1,5 @@
 package Filmoa::Handler;
+use Filmoa::Config;
 use Filmoa::Utils;
 use Filmoa::View;
 use Plack::Request;
