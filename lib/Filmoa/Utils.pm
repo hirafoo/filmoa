@@ -91,6 +91,7 @@ sub get_tweets {
     my $user   = $params->{user};
     my %opt    = (
         page => $page,
+        count => 10,
         ($max_id ? (max_id => $max_id) : ()),
         ($user ? (screen_name => $user) : ()),
     );
