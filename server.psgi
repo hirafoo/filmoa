@@ -1,5 +1,3 @@
-use strict;
-use warnings;
 use lib qw/lib/;
 use Filmoa::Utils;
 use Filmoa::Loader;

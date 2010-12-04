@@ -12,7 +12,7 @@
     [%- INCLUDE "_tweet.html" WITH t = t %]
     [%- UNLESS no_reply_link %]
         [%- st = t.retweeted_status || t %]
-<a href="/reply?in_reply_to=[% st.user.screen_name %]&in_reply_to_status_id=[% st.id %]">返信</a>
+<a href="/reply?in_reply_to=[% st.user.screen_name %]&in_reply_to_status_id=[% st.id %]">Reply</a>
 <a href="/reply?in_reply_to=[% st.user.screen_name %]&in_reply_to_status_id=[% st.id %]&text=[% st.text | raw %]">RT</a>
     via [% t.source | raw %]
     [%- END %]
