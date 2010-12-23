@@ -7,7 +7,7 @@
 [%- INCLUDE "_tweet.html" WITH t = parent_tweet %]
 </div>
 [%- END %]
-<a href="/reply?in_reply_to=[% target_tweet.by %]&in_reply_to_status_id=[% target_tweet.id %]">返信</a>
+<a href="/reply?in_reply_to=[% target_tweet.by %]&in_reply_to_status_id=[% target_tweet.id %]">Reply</a>
 <a href="/reply?in_reply_to=[% target_tweet.by %]&in_reply_to_status_id=[% target_tweet.id %]&text=[% target_tweet.text | raw %]">RT</a>
 </div>
 [% END -%]
