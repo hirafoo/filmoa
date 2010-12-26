@@ -1,11 +1,32 @@
 [% WRAPPER "_wrapper.html" -%]
 <div class="center">
-    <img src="[% user.profile_image_url %]" /><br />
-    <a href="/user/[% params.user %]">[% params.user %]</a> / [% user.name %]<br />
-    following:<a href="/user/[% params.user %]/following">[% user.friends_count %]</a>
-    followers:<a href="/user/[% params.user %]/followers">[% user.followers_count %]</a><br />
-    <a href="/user/[% params.user %]/profile">profile</a> / [% link('http://twtr.jp/user/' _ params.user, 'twtr.jp') | raw %]
+    <p>
+        <img src="[% user.profile_image_url %]" /><br />
+        [% user_link(user.screen_name) | raw %] / [% user.name %]<br />
+        [% link('http://twtr.jp/user/' _ params.user, 'twtr.jp') | raw %]<br />
+
+        [%- IF config.you != user.screen_name %]
+            [%- IF is_following %]
+                [% link('/destroy_friend?id=' _ user.id, 'unfollow ' _ user.screen_name) | raw %]
+            [%- ELSE %]
+                [% link('/create_friend?id=' _ user.id, 'follow ' _ user.screen_name) | raw %]
+            [%- END %]
+        [%- END %]
+    </p>
 </div>
+
+<div class="border_dim">following</div>
+<a href="/user/[% user.screen_name %]/following">[% user.friends_count %]</a>
+<div class="border_dim">followers</div>
+<a href="/user/[% user.screen_name %]/followers">[% user.followers_count %]</a>
+<div class="border_dim">bio</div>
+[% user.description %]
+<div class="border_dim">location</div>
+[% user.location %]
+<div class="border_dim">statuses_count</div>
+[% user.statuses_count %]
+<div class="border_dim">url</div>
+[% link(user.url) | raw %]
 <br />
 [% INCLUDE '_print_tweets.html' WITH not_show_profile_icon = 1 %]
 [% END -%]

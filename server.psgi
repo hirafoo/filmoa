@@ -10,5 +10,6 @@ my $app = sub {
 };
 
 builder {
+    enable "Plack::Middleware::StackTrace";
     $app;
 };

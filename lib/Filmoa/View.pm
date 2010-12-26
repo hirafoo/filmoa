@@ -1,4 +1,5 @@
 package Filmoa::View;
+use Filmoa::Config;
 use Filmoa::Utils;
 use Text::Xslate;
 use Time::Piece;
@@ -17,8 +18,10 @@ sub _link {
     qq{<a href="$href" target="_blank">$text</a>}
 }
 
+my $config = config;
 sub funcs {
     +{ 
+        config => $config,
         link => sub {
             my ($href, $text) = @_;
             $href or return;

@@ -1,9 +1,10 @@
 package Filmoa::Controller::User;
+use Filmoa::Config;
 use Filmoa::Utils;
 
 sub index {
     my $user = nt->show_user(params->{user});
-    +{user => $user, title => $user->{screen_name}, tweets => get_tweets(params)}
+    +{user => $user, title => $user->{screen_name}, tweets => get_tweets(params), is_following => nt->friendship_exists(config->{you}, $user->{screen_name})}
 }
 
 sub status {

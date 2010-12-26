@@ -24,4 +24,13 @@ sub reply {
     +{target_tweet => $target_tweet, parent_tweet => $parent_tweet}
 }
 
+sub create_friend {
+    nt->create_friend(params->{id});
+    +{template => '_done'};
+}
+sub destroy_friend {
+    nt->destroy_friend(params->{id});
+    +{template => '_done'};
+}
+
 1;

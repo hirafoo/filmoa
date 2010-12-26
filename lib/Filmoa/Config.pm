@@ -5,6 +5,7 @@ use Config::Pit qw/pit_get/;
 
 our @EXPORT = qw/config/;
 
-sub config { pit_get("filmoa") }
+my $config = pit_get("filmoa");
+sub config { $config }
 
 1;
