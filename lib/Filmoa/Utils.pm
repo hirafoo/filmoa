@@ -38,6 +38,8 @@ my ($utf, $router, $nt, $params) = (
     +{},
 );
 
+config->{you} = $nt->verify_credentials->{screen_name};
+
 sub utf { $utf }
 sub router { $router }
 sub nt { $nt }
@@ -149,6 +151,5 @@ sub get_favorated {
     }
     \@statuses;
 }
-
 
 1;

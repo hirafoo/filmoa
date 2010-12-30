@@ -1,0 +1,8 @@
+[% WRAPPER "_wrapper.html" -%]
+
+really do?<br />
+[%- dispatch = "/" _ params.dispatch _ "?target=" _ params.target %]
+[%- text = params.dispatch _ " -> " _ params.target %]
+[% link(dispatch, text) | raw -%]<hr />
+
+[% END -%]

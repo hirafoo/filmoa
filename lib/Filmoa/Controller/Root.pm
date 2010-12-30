@@ -24,12 +24,24 @@ sub reply {
     +{target_tweet => $target_tweet, parent_tweet => $parent_tweet}
 }
 
+sub confirm {
+    +{template => '_confirm'};
+}
+
 sub create_friend {
-    nt->create_friend(params->{id});
+    nt->create_friend(params->{target});
     +{template => '_done'};
 }
 sub destroy_friend {
-    nt->destroy_friend(params->{id});
+    nt->destroy_friend(params->{target});
+    +{template => '_done'};
+}
+sub block_user {
+    nt->create_block(params->{target});
+    +{template => '_done'};
+}
+sub unblock_user {
+    nt->destroy_block(params->{target});
     +{template => '_done'};
 }
 

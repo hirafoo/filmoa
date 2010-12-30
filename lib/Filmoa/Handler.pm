@@ -32,7 +32,7 @@ sub handler {
             $template .= "/$action.html";
         }
 
-        my %stash = (%$action_res, action => $action, params => $params, you => config->{you});
+        my %stash = (%$action_res, action => $action, params => $params);
         my $xt = Filmoa::View->xt;
         my $content = utf->encode($xt->render($template, \%stash));
 

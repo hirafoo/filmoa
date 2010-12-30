@@ -5,11 +5,17 @@
         [% user_link(user.screen_name) | raw %] / [% user.name %]<br />
         [% link('http://twtr.jp/user/' _ params.user, 'twtr.jp') | raw %]<br />
 
+        [%- IF is_blocking %]
+            [% link('/confirm?dispatch=unblock_user&target=' _ params.user, 'unblock ' _ user.screen_name) | raw %]<br />
+        [%- ELSE %]
+            [% link('/confirm?dispatch=block_user&target=' _ params.user, 'block ' _ user.screen_name) | raw %]<br />
+        [%- END %]
+
         [%- IF config.you != user.screen_name %]
             [%- IF is_following %]
-                [% link('/destroy_friend?id=' _ user.id, 'unfollow ' _ user.screen_name) | raw %]
+                [% link('/confirm?dispatch=destroy_friend&target=' _ user.screen_name, 'unfollow ' _ user.screen_name) | raw %]
             [%- ELSE %]
-                [% link('/create_friend?id=' _ user.id, 'follow ' _ user.screen_name) | raw %]
+                [% link('/confirm?dispatch=create_friend&target=' _ user.screen_name, 'follow ' _ user.screen_name) | raw %]
             [%- END %]
         [%- END %]
     </p>

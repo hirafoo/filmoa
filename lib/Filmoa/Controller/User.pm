@@ -4,7 +4,16 @@ use Filmoa::Utils;
 
 sub index {
     my $user = nt->show_user(params->{user});
-    +{user => $user, title => $user->{screen_name}, tweets => get_tweets(params), is_following => nt->friendship_exists(config->{you}, $user->{screen_name})}
+    local $@;
+    eval { nt->block_exists($user->{screen_name}) };
+    my $is_blocking = $@ ? 0 : 1;
+    +{
+        user => $user,
+        title => $user->{screen_name},
+        tweets => get_tweets(params),
+        is_following => nt->friendship_exists(config->{you}, $user->{screen_name}),
+        is_blocking => $is_blocking,
+    }
 }
 
 sub status {
