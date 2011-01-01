@@ -18,8 +18,8 @@ sub index {
 
 sub status {
     my $target_tweet = get_tweet(params->{id});
-    my $parent_tweet = get_parent($target_tweet);
-    +{target_tweet => $target_tweet, parent_tweet => $parent_tweet};
+    my $tweet_tree   = get_tweet_tree($target_tweet);
+    +{target_tweet => $target_tweet, tweet_tree => $tweet_tree};
 }
 
 sub profile {

@@ -12,8 +12,10 @@ use Time::Piece;
 use LWP::UserAgent;
 use XML::RSS;
 
-our @EXPORT = qw/p say utf router nt params
-                 get_tweet get_tweets fix_tweets get_parent get_favorated/;
+our @EXPORT = qw/
+    p say utf router nt params ymd_hms
+    get_tweet get_tweets get_parent get_tweet_tree fix_tweets get_favorated
+/;
 
 sub import {
     strict->import;
@@ -131,8 +133,17 @@ sub get_tweet {
     fix_tweets([$tweet])->[0];
 }
 sub get_parent {
-    my $tweet = shift;
+    my $tweet = shift or return;
     get_tweet($tweet->{in_reply_to_status_id});
+}
+sub get_tweet_tree {
+    my $tweet = shift or return;
+    my @tree;
+    while (my $t = get_parent($tweet)) {
+        push @tree, $t;
+        $tweet = $t;
+    }
+    \@tree;
 }
 
 sub get_favorated {
@@ -150,6 +161,11 @@ sub get_favorated {
         push @statuses, +{content => $content, link => $link};
     }
     \@statuses;
+}
+
+sub ymd_hms {
+    my $created_at = shift;
+    $created_at->ymd('/') . " " . $created_at->hms;
 }
 
 1;

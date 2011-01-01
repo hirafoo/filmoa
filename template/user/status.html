@@ -1,10 +1,10 @@
 [% WRAPPER "_wrapper.html" WITH hide_menu = 1 -%]
 <div class="tweet">
 [%- INCLUDE "_tweet.html" WITH t = target_tweet %]
-[%- IF parent_tweet %]
+[%- FOR branch IN tweet_tree %]
 <hr />
 <div class="tweet">
-[%- INCLUDE "_tweet.html" WITH t = parent_tweet %]
+[%- INCLUDE "_tweet.html" WITH t = branch %]
 </div>
 [%- END %]
 <a href="/reply?in_reply_to=[% target_tweet.by %]&in_reply_to_status_id=[% target_tweet.id %]">Reply</a>

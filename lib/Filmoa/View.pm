@@ -32,36 +32,44 @@ sub funcs {
             my ($name) = @_;
             _link("/user/$name", $name);
         },
-        ago => sub {
+        ago => \&ago,
+        ago_or_date => sub {
             my $created_at = shift;
-            my $now = localtime;
-            $now += 32400;
-
-            my $diff = $now->epoch - $created_at->epoch;
-
-            if ($diff < 5) {
-                "less than 5 seconds ago"
-            }
-            elsif ($diff < 10) {
-                "less than 10 seconds ago"
-            }
-            elsif ($diff < 60) {
-                "less than a minute ago"
-            }
-            elsif ($diff < 3600) {
-                $diff = int($diff / 60);
-                my $min = $diff == 1 ? "minute" : "minutes";
-                "$diff $min ago"
-            }
-            elsif ($diff < 86400) {
-                $diff = int($diff / 3600);
-                my $hour = $diff == 1 ? "hour" : "hours";
-                "about $diff $hour ago"
-            }
-            else {
-                $created_at->ymd('/') . " " . $created_at->hms
-            }
+            my $ago = ago($created_at);
+            my $ymd_hms = ymd_hms($created_at);
+            $ago eq $ymd_hms ? $ymd_hms : $ago;
         },
+    }
+}
+
+sub ago {
+    my $created_at = shift;
+    my $now = localtime;
+    $now += 32400;
+
+    my $diff = $now->epoch - $created_at->epoch;
+
+    if ($diff < 5) {
+        "less than 5 seconds ago"
+    }
+    elsif ($diff < 10) {
+        "less than 10 seconds ago"
+    }
+    elsif ($diff < 60) {
+        "less than a minute ago"
+    }
+    elsif ($diff < 3600) {
+        $diff = int($diff / 60);
+        my $min = $diff == 1 ? "minute" : "minutes";
+        "$diff $min ago"
+    }
+    elsif ($diff < 86400) {
+        $diff = int($diff / 3600);
+        my $hour = $diff == 1 ? "hour" : "hours";
+        "about $diff $hour ago"
+    }
+    else {
+        $created_at->ymd('/') . " " . $created_at->hms
     }
 }
 
