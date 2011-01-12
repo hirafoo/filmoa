@@ -60,7 +60,7 @@ sub parse_time {
 sub add_link {
     my $tweet = shift;
     my $html = '';
-    for my $token (split m{(http://[A-Za-z0-9_=%@/~\-\.\?\#\+]+|\@[0-9A-Za-z_]+)}, $tweet) {
+    for my $token (split m{(http://[A-Za-z0-9_=%@&/~\!\-\.\?\#\+]+|\@[0-9A-Za-z_]+)}, $tweet) {
         if ($token =~ m{^http://}) {
             $html .= '<a href="' . encode_entities($token) . '" target="_blank">'
             . encode_entities($token) . '</a>';
