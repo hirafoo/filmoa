@@ -1,10 +1,10 @@
 <div class="center">
 [% SET page = params.page || 1 %]
 [% IF page != 1 %]
-<a accesskey="*" href="?page=[% page - 1 %]&max_id=[% params.max_id %]">* prev</a>
+<a accesskey="*" href="?page=[% page - 1 %]">* prev</a>
 [%- ELSE %]
 * prev
 [%- END %]
  / 
-<a accesskey="#" href="?page=[% page + 1 %]&max_id=[% tweets.0.id %]">next #</a>
+<a accesskey="#" href="?page=[% page + 1 %]">next #</a>
 </div>
